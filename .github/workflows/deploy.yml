@@ -2,12 +2,11 @@ name: Remote Deploy
 
 on:
   push:
-    branches: [ main ] # This triggers the deploy whenever you push to the main branch
+    branches: [ main ]
 
 jobs:
   deploy:
-    runs-on: self-hosted # This tells GitHub to use your HK VPS runner
-
+    runs-on: self-hosted
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -19,7 +18,6 @@ jobs:
         run: npm run build
 
       - name: Start or Reload with PM2
-        # This will try to reload the app (zero-downtime). 
-        # If it's the first time, it will start it instead.
         run: |
-          pm2 reload portfolio --update-env || pm2 start npm --name "portfolio" -- start
+          # Use the full path we created with 'ln -s'
+          /usr/bin/pm2 reload portfolio --update-env || /usr/bin/pm2 start npm --name "portfolio" -- start
