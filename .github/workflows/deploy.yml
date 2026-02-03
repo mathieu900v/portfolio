@@ -7,17 +7,25 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Path Debugger
+        run: |
+          echo "Current Path: $(pwd)"
+          echo "Checking for package.json..."
+          ls -F # This will list files. If you don't see package.json, we know why.
+
       - name: Install Dependencies
+        # If your files are in the root of the repo, this stays as is.
         run: npm install
 
       - name: Build Project
         run: npm run build
 
-      - name: Start or Reload with PM2
+      - name: PM2 Start/Reload
         run: |
-          # Use the full path we created with 'ln -s'
-          /usr/bin/pm2 reload portfolio --update-env || /usr/bin/pm2 start npm --name "portfolio" -- start
+          # Use the absolute path for PM2 to avoid 'command not found'
+          /usr/bin/pm2 reload portfolio || /usr/bin/pm2 start npm --name "portfolio" -- start
