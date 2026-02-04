@@ -1,4 +1,4 @@
-name: Remote Deploy
+name: Deploy Static Portfolio
 
 on:
   push:
@@ -6,26 +6,35 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Path Debugger
-        run: |
-          echo "Current Path: $(pwd)"
-          echo "Checking for package.json..."
-          ls -F # This will list files. If you don't see package.json, we know why.
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install Dependencies
-        # If your files are in the root of the repo, this stays as is.
-        run: npm install
+        run: npm ci
 
-      - name: Build Project
-        run: NODE_OPTIONS="--max-old-space-size=1024" npm run build
+      - name: Build Static Export
+        run: npm run build
 
-      - name: PM2 Start/Reload
+      - name: Deploy to VM
         run: |
-          # Use the absolute path for PM2 to avoid 'command not found'
-          /usr/bin/pm2 reload portfolio || /usr/bin/pm2 start npm --name "portfolio" -- start
+          # Setup SSH key
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VM_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          
+          # Add VM to known hosts
+          ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+          
+          # Deploy files via rsync
+          rsync -avz --delete out/ root@${{ secrets.VM_HOST }}:/var/www/hk.mathieuv.pro/
+          
+          echo "✓ Deployed successfully to https://hk.mathieuv.pro"
