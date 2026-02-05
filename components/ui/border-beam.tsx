@@ -56,7 +56,7 @@ export const BorderBeam = ({
   size = 50,
   delay = 0,
   duration = 6,
-  colorFrom = "#000000",
+  colorFrom = "#9c40ff00",
   colorTo = "#9c40ff",
   transition,
   style,
