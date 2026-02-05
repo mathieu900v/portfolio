@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import createGlobe, { COBEOptions } from "cobe"
 import { useMotionValue, useSpring } from "motion/react"
 
@@ -19,7 +19,7 @@ export const GLOBE_CONFIG: COBEOptions = {
   theta: 0.3,
   dark: 0,
   diffuse: 0.4,
-  mapSamples: 16000,
+  mapSamples: 16000, // Desktop quality
   mapBrightness: 1.2,
   baseColor: [1, 1, 1],
   markerColor: [251 / 255, 100 / 255, 21 / 255],
@@ -52,6 +52,11 @@ export function Globe({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const pointerInteracting = useRef<number | null>(null)
   const pointerInteractionMovement = useRef(0)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768)
+  }, [])
 
   const r = useMotionValue(0)
   const rs = useSpring(r, {
@@ -85,8 +90,15 @@ export function Globe({
     window.addEventListener("resize", onResize)
     onResize()
 
-    const globe = createGlobe(canvasRef.current!, {
+    // Use lower quality settings on mobile to reduce CPU load
+    const mobileOptimizedConfig = isMobile ? {
       ...config,
+      mapSamples: 3000,
+      devicePixelRatio: 1,
+    } : config;
+
+    const globe = createGlobe(canvasRef.current!, {
+      ...mobileOptimizedConfig,
       ...(markers ? { markers } : {}),
       width: width * 2,
       height: width * 2,
@@ -103,7 +115,7 @@ export function Globe({
       globe.destroy()
       window.removeEventListener("resize", onResize)
     }
-  }, [rs, config])
+  }, [rs, config, isMobile])
 
   return (
     <div

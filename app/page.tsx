@@ -1,12 +1,16 @@
+"use client"
+
 import { Marquee } from "@/components/ui/marquee";
 import { BorderBeam } from "@/components/ui/border-beam";
-import { Globe } from "@/components/ui/globe";
 import { FlickeringGrid } from "@/components/ui/flickering-grid";
 import { Button } from "@/components/ui/button";
 import { WeChatButton } from "@/components/wechat-button";
 import Image from "next/image";
 import { GitHubLogoIcon, LinkedInLogoIcon, EnvelopeClosedIcon, ArrowRightIcon, CodeIcon, MixIcon, LayersIcon } from "@radix-ui/react-icons";
 import { AuroraText } from "@/components/ui/aurora-text";
+import { GlobeSection } from "@/components/globe-section";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import { ThemeAwareFlickeringGrid } from "@/components/theme-aware-flickering-grid";
 
 // Tech icons for the cloud
 const techSlugs = [
@@ -95,15 +99,13 @@ const projects = [
 export default function Home() {
   return (
     <main className="relative min-h-screen bg-background">
+      {/* Theme Toggler */}
+      <div className="fixed top-4 right-4 z-[100]">
+        <AnimatedThemeToggler className="h-10 w-10 rounded-full bg-card border border-border shadow-lg hover:shadow-xl transition-shadow" />
+      </div>
+
       {/* Background Flickering Grid */}
-      <FlickeringGrid
-        className="fixed inset-0 z-0"
-        squareSize={4}
-        gridGap={6}
-        color="#5a5a5a"
-        maxOpacity={0.1}
-        flickerChance={0.5}
-      />
+      <ThemeAwareFlickeringGrid />
 
       {/* Hero Section - Bento Style */}
       <section className="relative z-50 px-4 py-8 pt-16">
@@ -113,14 +115,14 @@ export default function Home() {
             {/* Main intro card - spans 2 columns */}
             <div className="relative md:col-span-2 overflow-hidden rounded-xl border border-border/50 bg-card p-8 hover:border-border transition-colors">
               <div className="flex flex-wrap gap-3 mb-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/20 border border-orange-500/30 text-orange-600 dark:text-orange-400">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.18l6.9 3.82L12 11.82 5.1 8 12 4.18zM5 16.54V9.09l6 3.33v7.45l-6-3.33zm14 0l-6 3.33v-7.45l6-3.33v7.45z"/></svg>
                   <span className="text-xs font-medium">AWS Certified</span>
                 </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-500">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/20 border border-red-500/30 text-red-600 dark:text-red-400">
                   <span className="text-xs font-medium">🇨🇳 GBA based Company (Zhuhai Hengqin)</span>
                 </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-600 dark:text-teal-400">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7v2h20V7l-10-5zM4 11v9h3v-6h10v6h3v-9H4zm6 9v-4h4v4h-4z"/></svg>
                   <span className="text-xs font-medium">Bank-Grade Security Standards</span>
                 </div>
@@ -128,9 +130,9 @@ export default function Home() {
               <h1 className="text-3xl md:text-5xl font-bold mb-8 text-foreground">
                 Mathieu Voyer
               </h1>
-              <h3 className="text-xl md:text-2xl text-primary mb-6">
+              <h2 className="text-xl md:text-2xl text-primary mb-6">
                 Fractional CTO & Cloud Architect for the Greater Bay Area
-              </h3>
+              </h2>
               <p className="text-muted-foreground">
                 Bridging the gap between enterprise-grade stability and AI innovation. Based in Zhuhai, serving Hong Kong and global markets with compliant, high-performance tech leadership.
               </p>
@@ -231,32 +233,32 @@ export default function Home() {
                     {project.tech.map((t) => {
                       // Simplified color scheme
                       const techColors: Record<string, string> = {
-                        // Languages - Purple
-                        'COBOL': 'bg-purple-500/10 text-purple-500 border border-purple-500/20',
-                        'SQL': 'bg-purple-500/10 text-purple-500 border border-purple-500/20',
-                        'C#': 'bg-purple-500/10 text-purple-500 border border-purple-500/20',
-                        'ASP.NET': 'bg-purple-500/10 text-purple-500 border border-purple-500/20',
-                        'Python': 'bg-purple-500/10 text-purple-500 border border-purple-500/20',
-                        'React': 'bg-purple-500/10 text-purple-500 border border-purple-500/20',
-                        'React Native': 'bg-purple-500/10 text-purple-500 border border-purple-500/20',
-                        'PostgreSQL': 'bg-purple-500/10 text-purple-500 border border-purple-500/20',
-                        'Mobile Development': 'bg-purple-500/10 text-purple-500 border border-purple-500/20',
-                        'Agile': 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20',
-                        // Cloud Providers - Different colors
-                        'Google Firebase': 'bg-amber-500/10 text-amber-500 border border-amber-500/20',
-                        'Oracle Cloud': 'bg-red-500/10 text-red-500 border border-red-500/20',
-                        // AI - Emerald
-                        'OpenAI': 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20',
-                        'LLM': 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20',
-                        'AI Integration': 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20',
-                        'IBM Watson AI': 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20',
-                        // Security/Compliance - Blue
-                        'PCI-DSS': 'bg-blue-500/10 text-blue-500 border border-blue-500/20',
-                        // Mobile Platforms - Specific colors
-                        'iOS': 'bg-slate-600/10 text-slate-600 border border-slate-600/20',
-                        'Android': 'bg-green-500/10 text-green-500 border border-green-500/20',
-                        // Legacy Systems - Slate
-                        'Mainframe': 'bg-slate-500/10 text-slate-500 border border-slate-500/20',
+                        // Languages - Blue tones that work in both modes
+                        'COBOL': 'bg-blue-500/20 text-blue-600 border border-blue-500/30 dark:text-blue-400',
+                        'SQL': 'bg-blue-500/20 text-blue-600 border border-blue-500/30 dark:text-blue-400',
+                        'C#': 'bg-blue-500/20 text-blue-600 border border-blue-500/30 dark:text-blue-400',
+                        'ASP.NET': 'bg-indigo-500/20 text-indigo-600 border border-indigo-500/30 dark:text-indigo-400',
+                        'Python': 'bg-indigo-500/20 text-indigo-600 border border-indigo-500/30 dark:text-indigo-400',
+                        'React': 'bg-cyan-500/20 text-cyan-600 border border-cyan-500/30 dark:text-cyan-400',
+                        'React Native': 'bg-cyan-500/20 text-cyan-600 border border-cyan-500/30 dark:text-cyan-400',
+                        'PostgreSQL': 'bg-slate-500/20 text-slate-600 border border-slate-500/30 dark:text-slate-400',
+                        'Mobile Development': 'bg-slate-500/20 text-slate-600 border border-slate-500/30 dark:text-slate-400',
+                        'Agile': 'bg-emerald-500/20 text-emerald-600 border border-emerald-500/30 dark:text-emerald-400',
+                        // Cloud Providers - Warm colors
+                        'Google Firebase': 'bg-orange-500/20 text-orange-600 border border-orange-500/30 dark:text-orange-400',
+                        'Oracle Cloud': 'bg-rose-500/20 text-rose-600 border border-rose-500/30 dark:text-rose-400',
+                        // AI - Teal/Green tones
+                        'OpenAI': 'bg-teal-500/20 text-teal-600 border border-teal-500/30 dark:text-teal-400',
+                        'LLM': 'bg-teal-500/20 text-teal-600 border border-teal-500/30 dark:text-teal-400',
+                        'AI Integration': 'bg-teal-500/20 text-teal-600 border border-teal-500/30 dark:text-teal-400',
+                        'IBM Watson AI': 'bg-teal-500/20 text-teal-600 border border-teal-500/30 dark:text-teal-400',
+                        // Security/Compliance - Purple
+                        'PCI-DSS': 'bg-violet-500/20 text-violet-600 border border-violet-500/30 dark:text-violet-400',
+                        // Mobile Platforms - Neutral grays
+                        'iOS': 'bg-gray-500/20 text-gray-600 border border-gray-500/30 dark:text-gray-400',
+                        'Android': 'bg-lime-500/20 text-lime-600 border border-lime-500/30 dark:text-lime-400',
+                        // Legacy Systems - Stone
+                        'Mainframe': 'bg-stone-500/20 text-stone-600 border border-stone-500/30 dark:text-stone-400',
                       };
                       const colorClass = techColors[t] || 'bg-primary/10 text-primary border border-primary/20';
                       
@@ -310,11 +312,6 @@ export default function Home() {
                   Strategic technical leadership for startups and SMEs. I align your technology roadmap with your business goals, mentor your team, and ensure your stack is built for the long term.
                 </p>
               </div>
-              <Button asChild variant="link" className="p-0 self-start gap-2 group-hover:gap-3 transition-all">
-                <a href="mailto:dev@mathieuv.pro">
-                  Get a quote <ArrowRightIcon className="w-4 h-4" />
-                </a>
-              </Button>
             </div>
 
             {/* Card 2: DevOps */}
@@ -344,51 +341,7 @@ export default function Home() {
       </section>
 
       {/* Globe Section */}
-      <section className="relative z-10 px-4 py-8">
-  <div className="max-w-6xl mx-auto">
-    <div className="relative overflow-hidden rounded-xl border border-border/50 bg-card min-h-[325px] md:min-h-[500px] flex items-center justify-center">
-      {/* Dynamic Header Overlay */}
-      <div className="absolute top-0 left-0 md:top-7 md:left-7 z-20 max-w-sm">
-        <div className="backdrop-blur-md bg-background/80 p-6 rounded-xl border border-border/50">
-          <h3 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/60">
-            On-the-ground in the GBA
-          </h3>
-          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-            Operating through a <span className="text-foreground font-semibold">Mainland-based WFOE</span>. I provide Western-grade Cloud Architecture with deep local expertise in the Zhuhai-Hong Kong-Macau corridor.
-          </p>
-          <div className="mt-6 grid grid-cols-2 gap-4">
-            <div>
-              <div className="text-lg font-bold text-primary italic">Hybrid</div>
-              <div className="text-[14px] text-muted-foreground uppercase">On-site or Remote Ready</div>
-            </div>
-            <div>
-              <div className="text-lg font-bold text-primary italic">Direct</div>
-              <div className="text-[14px] text-muted-foreground uppercase">Local B2B Invoicing</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* The Globe with an active gradient glow behind it */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-transparent z-0" />
-            <Globe 
-              className="opacity-80"
-              markers={[
-                { location: [22.2707, 113.5767], size: 0.3 }, // Zhuhai - main
-                { location: [22.3193, 114.1694], size: 0.06 }, // Hong Kong
-                { location: [22.1987, 113.5439], size: 0.05 }, // Macau
-                { location: [23.1291, 113.2644], size: 0.05 }, // Guangzhou
-                { location: [22.5431, 114.0579], size: 0.05 }, // Shenzhen
-                { location: [31.2304, 121.4737], size: 0.04 }, // Shanghai
-                { location: [48.5734, 7.7521], size: 0.04 }, // Strasbourg
-                { location: [55.6761, 12.5683], size: 0.04 }, // Copenhagen
-                { location: [48.8566, 2.3522], size: 0.04 }, // Paris
-                { location: [43.6047, 1.4442], size: 0.04 }, // Toulouse
-              ]}
-            />
-          </div>
-        </div>
-      </section>
+      <GlobeSection />
 
       {/* Get In Touch CTA */}
       <section className="relative z-10 px-4 py-8">
@@ -398,24 +351,17 @@ export default function Home() {
       <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-500" />
       
       <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-        Scale your <AuroraText>Infrastructure</AuroraText>, <br />not your overhead.
+        Scale your <AuroraText>Infrastructure</AuroraText><br />Integrate new <AuroraText>AI Capabilities</AuroraText>
       </h2>
       
       <p className="text-muted-foreground mb-10 max-w-2xl mx-auto text-lg leading-relaxed">
-        Whether you need a <strong>Fractional CTO</strong> to lead a pivot, or a 
-        <strong> Cloud Architect</strong> to audit a $100k/mo AWS bill—I deliver 
-        banking-grade precision at startup speed.
+        With experience in Europe's largest banking systems and AI integrations, I provide the strategic leadership you need. <strong>Let's discuss how I can accelerate your vision.</strong>
       </p>
 
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
         <Button asChild size="lg" className="h-14 px-8 text-md font-bold gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all">
           <a href="mailto:dev@mathieuv.pro">
             <EnvelopeClosedIcon className="w-5 h-5" />
-            Start a Technical Audit
-          </a>
-        </Button>
-        <Button asChild variant="outline" size="lg" className="h-14 px-8 text-md font-bold">
-          <a href="https://linkedin.com/in/mvoyer">
             Discuss Partnership
           </a>
         </Button>
@@ -431,7 +377,7 @@ export default function Home() {
 </section>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-border/50 py-8">
+      <footer className="relative z-50 border-t border-border/50 py-8">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
@@ -447,17 +393,17 @@ export default function Home() {
             </div>
             <div className="flex gap-2">
               <Button asChild variant="ghost" size="icon">
-                <a href="mailto:dev@mathieuv.pro">
+                <a href="mailto:dev@mathieuv.pro" aria-label="Email Mathieu">
                   <EnvelopeClosedIcon className="w-4 h-4" />
                 </a>
               </Button>
               <Button asChild variant="ghost" size="icon">
-                <a href="https://github.com/mathieu900v" target="_blank" rel="noopener noreferrer">
+                <a href="https://github.com/mathieu900v" target="_blank" rel="noopener noreferrer" aria-label="Visit GitHub profile">
                   <GitHubLogoIcon className="w-4 h-4" />
                 </a>
               </Button>
               <Button asChild variant="ghost" size="icon">
-                <a href="https://linkedin.com/in/mvoyer" target="_blank" rel="noopener noreferrer">
+                <a href="https://linkedin.com/in/mvoyer" target="_blank" rel="noopener noreferrer" aria-label="Connect on LinkedIn">
                   <LinkedInLogoIcon className="w-4 h-4" />
                 </a>
               </Button>

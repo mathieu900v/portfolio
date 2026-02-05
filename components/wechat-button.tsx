@@ -18,8 +18,8 @@ export function WeChatButton({
   const [isOpen, setIsOpen] = useState(false);
 
   const defaultClassName = variant === "outline" 
-    ? "gap-2 border-[#07C160] text-[#07C160] hover:bg-[#07C160]/10" 
-    : "";
+    ? "gap-2 border-[#07C160] text-[#07C160] hover:bg-[#07C160]/10 cursor-pointer" 
+    : "cursor-pointer";
 
   return (
     <>
